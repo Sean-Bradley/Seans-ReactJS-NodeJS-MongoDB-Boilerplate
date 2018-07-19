@@ -26,10 +26,10 @@ class App extends Component {
                     </nav>
                     <div className="container">
                         <Switch>
-                            <Route exact path='/' component={Home} />
-                            <Route exact path='/Cats' component={Cats} />
-                            <Route exact path='/Dogs' component={Dogs} />
-                            <Route exact path='/Birds' component={Birds} />
+                            <Route path='/' exact component={Home} />
+                            <Route path='/Cats' component={Cats} />
+                            <Route path='/Dogs' component={Dogs} />
+                            <Route path='/Birds' component={Birds} />
                         </Switch>
                     </div>
 

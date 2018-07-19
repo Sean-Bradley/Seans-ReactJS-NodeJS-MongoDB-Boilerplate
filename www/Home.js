@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            description: "Nothing to see here, go and see cats instead."
-        }
     }
     render() {
         return (
@@ -15,7 +13,7 @@ class Home extends Component {
                     <p>Boilerplate for ReactJS, NodeJS and MongoDB.</p>
                     <p>Includes Gulp Minify, Uglify, Concat, Mocha and Chai Tests</p>
                 </div>
-                <h1>{this.state.description}</h1>
+                <p>Nothing to see here, go and see {<Link to='/Cats'>Cats</Link>} instead.</p>
             </div>
         );
     }

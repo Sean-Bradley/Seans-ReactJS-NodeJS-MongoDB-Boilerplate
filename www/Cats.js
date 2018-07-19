@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import ReactTable from "react-table";
 import 'react-table/react-table.css'
 
+
 class Cats extends Component {
     constructor(props) {
         super(props);
+        
 
         this.state = {
             data: [],
             names: {},
             debugInfo: "debiginfo",
             catName: "",
+            addButtonEnabled: false,
             columns: [{
                 Header: 'Id',
                 accessor: '_id'
@@ -52,6 +55,7 @@ class Cats extends Component {
         this.handleAddClick = this.handleAddClick.bind(this);
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.handleAddChange = this.handleAddChange.bind(this);
     }
     saveEdits(v, id) {
         console.log(v + " " + id);
@@ -81,27 +85,31 @@ class Cats extends Component {
         )
     }
     handleAddClick() {
-        fetch('http://127.0.0.1:8080/api/Cats', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Cache-Control': 'no-cache'
-            },
-            body: "name=" + this.state.catName
-        })
-            .then(
-                fetch('http://127.0.0.1:8080/api/Cats')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.state.data = data;
-                        this.setState({
-                            table: {
-                                columns: this.state.columns,
-                                data: this.state.data
-                            }
+        if (this.state.catName.length >= 4 && this.state.catName.length <= 20) {
+            fetch('http://127.0.0.1:8080/api/Cats', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Cache-Control': 'no-cache'
+                },
+                body: "name=" + this.state.catName
+            })
+                .then(
+                    fetch('http://127.0.0.1:8080/api/Cats')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.state.data = data;
+                            this.setState({
+                                table: {
+                                    columns: this.state.columns,
+                                    data: this.state.data
+                                }
+                            })
                         })
-                    })
-            )
+                )
+        } else {
+            document.getElementById("validationMessage").style.display = "block";
+        }
     };
     handleEditClick(e, id) {
         document.getElementById("name_" + id).style.display = "none";
@@ -131,7 +139,19 @@ class Cats extends Component {
                     })
             )
     }
-    render() {
+    
+    handleAddChange(e) {
+        this.setState({ catName: e.target.value });
+        var enabled = this.state.catName.length >= 4 && this.state.catName.length <= 20;
+        this.state.addButtonEnabled = enabled;
+        if(enabled){
+            document.getElementById("validationMessage").style.display = "none";
+        }else{
+            document.getElementById("validationMessage").style.display = "block";
+        } 
+    }
+    render() {        
+
         return (
             <div>
                 <h1>Cats</h1>
@@ -154,9 +174,14 @@ class Cats extends Component {
                 />
 
                 <p>Cat Name:
-                    <input type="text" value={this.state.catName} placeholder="Cat Name" onChange={(ev) => this.setState({ catName: ev.target.value })} />
-                    <button onClick={this.handleAddClick}>Add Cat</button>
-                    <span style={{ color: 'red' }}>Cat Name is required.</span>
+                    <input
+                        type="text"
+                        value={this.state.catName}
+                        placeholder="Cat Name"
+                        onChange={this.handleAddChange}
+                    />
+                    <button disabled={!this.state.addButtonEnabled} onClick={this.handleAddClick}>Add Cat</button>
+                    <span id='validationMessage' style={{ display: 'none', color: 'red' }}>Cat Name is not valid.</span>
                 </p>
 
                 <hr />
