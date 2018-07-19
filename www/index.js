@@ -35,7 +35,7 @@ class App extends Component {
 
                     <footer className='footer'>
                         <div className='container'>
-                            <span className='text-muted'>You can download this project from my github project page at <a href='https://github.com/Sean-Bradley/Seans-AngularJS-NodeJS-MongoDB-Boilerplate.git' target='_blank'>https://github.com/Sean-Bradley/Seans-ReactJS-NodeJS-MongoDB-Boilerplate.git</a></span>
+                            <span className='text-muted'>You can download this project from my github project page at <a href='https://github.com/Sean-Bradley/Seans-ReactJS-NodeJS-MongoDB-Boilerplate' target='_blank'>https://github.com/Sean-Bradley/Seans-ReactJS-NodeJS-MongoDB-Boilerplate</a></span>
                         </div>
                     </footer>
                 </div>

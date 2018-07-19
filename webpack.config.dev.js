@@ -23,7 +23,11 @@ export default {
             {
                 test: /\.js$/,
                 loader: 'babel-loader'
-            }
+            },
+            {
+                test: /\.(css|less)$/,
+                use: ["style-loader", "css-loader"]
+                }
         ]
     }
 
