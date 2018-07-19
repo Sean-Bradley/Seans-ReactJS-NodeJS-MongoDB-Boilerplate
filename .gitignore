@@ -1,6 +1,5 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-/www/vendor
-/node_modules
-
-package-lock.json
+/nodejs/www/vendor
+/nodejs/node_modules
+/nodejs/package-lock.json

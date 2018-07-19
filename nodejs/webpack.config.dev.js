@@ -5,7 +5,7 @@ export default {
     devtool: 'inline-source-map',
 
     entry: [
-        path.resolve(__dirname, 'www/index.js')
+        path.resolve(__dirname, './react/index.js')
     ],
 
     output: {

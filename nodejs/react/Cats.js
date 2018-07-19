@@ -59,7 +59,7 @@ class Cats extends Component {
     }
     saveEdits(v, id) {
         console.log(v + " " + id);
-        fetch('http://127.0.0.1:8080/api/Cats/' + id, {
+        fetch('/api/Cats/' + id, {
             method: 'put',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -67,7 +67,7 @@ class Cats extends Component {
             },
             body: "name=" + v
         }).then(
-            fetch('http://127.0.0.1:8080/api/Cats')
+            fetch('/api/Cats')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("name_" + id).style.display = "block";
@@ -85,7 +85,7 @@ class Cats extends Component {
         )
     }
     handleAddClick() {
-        fetch('http://127.0.0.1:8080/api/Cats', {
+        fetch('/api/Cats', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,7 +94,7 @@ class Cats extends Component {
             body: "name=" + this.state.catName
         })
             .then(
-                fetch('http://127.0.0.1:8080/api/Cats')
+                fetch('/api/Cats')
                     .then(response => response.json())
                     .then(data => {
                         this.state.data = data;
@@ -114,7 +114,7 @@ class Cats extends Component {
         document.getElementById("saveButton_" + id).style.display = "block";
     }
     handleDeleteClick(e, id) {
-        fetch('http://127.0.0.1:8080/api/Cats/' + id, {
+        fetch('/api/Cats/' + id, {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -122,7 +122,7 @@ class Cats extends Component {
             }
         })
             .then(
-                fetch('http://127.0.0.1:8080/api/Cats')
+                fetch('/api/Cats')
                     .then(response => response.json())
                     .then(data => {
                         this.state.data = data;
@@ -159,7 +159,7 @@ class Cats extends Component {
                     className="-striped -highlight"
                     onFetchData={(state, instance) => {
                         this.setState({ loading: true })
-                        fetch('http://127.0.0.1:8080/api/Cats')
+                        fetch('/api/Cats')
                             .then(response => response.json())
                             .then(data => {
                                 this.setState({ data: data })

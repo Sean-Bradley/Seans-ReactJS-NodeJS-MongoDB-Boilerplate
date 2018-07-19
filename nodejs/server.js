@@ -8,7 +8,7 @@ const csrf = require('csurf');
 const cookieParser = require('cookie-parser');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/seanwasere', { useNewUrlParser: true });
+mongoose.connect('mongodb://mongodb:27017/seanwasere', { useNewUrlParser: true });
 
 const compiler = webpack(config);
 
@@ -29,6 +29,7 @@ app.use(cookieParser());
 //app.use(csrf({ cookie: true, value: (req) => (req.cookies._csrf) }));
 
 var catsRouter = require('./routes/cats');
+//app.use('/api/', catsRouter);
 app.use('/api/', catsRouter);
 
 app.use(express.static(path.join(__dirname, 'www')));
