@@ -35,12 +35,12 @@ class Cats extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     componentDidMount() {
-        fetch('http://127.0.0.1:8080/api/Cats')
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ data: data })
-            }
-            );
+        // fetch('http://127.0.0.1:8080/api/Cats')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         this.setState({ data: data })
+        //     }
+        //     );
     }
     handleClick() {
         fetch('http://127.0.0.1:8080/api/Cats', {
@@ -50,51 +50,57 @@ class Cats extends Component {
                 'Cache-Control': 'no-cache'
             },
             body: "name=" + this.state.catName
-        }).then(
-            fetch('http://127.0.0.1:8080/api/Cats')
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({ data: data })
-                }
-                )
-        );
+        })
+            .then(
+                fetch('http://127.0.0.1:8080/api/Cats')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.state.data = data;
+                        this.setState({ 
+                            table: {
+                                columns: this.state.columns,
+                                data: this.state.data 
+                            }
+                    })
+                })
+            )            
     };
-    requestData(pageSize, page, sorted, filtered) {
-        return new Promise((resolve, reject) => {
-            fetch('http://127.0.0.1:8080/api/Cats')
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({ data: data })
-                }
-                );
-        });
-    };
+    // requestData(pageSize, page, sorted, filtered) {
+    //     return new Promise((resolve, reject) => {
+    //         fetch('http://127.0.0.1:8080/api/Cats')
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 this.setState({ data: data })
+    //             }
+    //             );
+    //     });
+    // };
 
-    fetchData(state, instance) {
-        // Whenever the table model changes, or the user sorts or changes pages, this method gets called and passed the current table model.
-        // You can set the `loading` prop of the table to true to use the built-in one or show you're own loading bar if you want.
-        this.setState({ loading: true });
-        fetch('http://127.0.0.1:8080/api/Cats')
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({ data: data })
-                }
-                );
-        // Request the data however you want.  Here, we'll use our mocked service we created earlier
-        // requestData(
-        //     state.pageSize,
-        //     state.page,
-        //     state.sorted,
-        //     state.filtered
-        // ).then(res => {
-        //     // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
-        //     this.setState({
-        //         data: res.rows,
-        //         pages: res.pages,
-        //         loading: false
-        //     });
-        // });
-    }
+    // fetchData(state, instance) {
+    //     // Whenever the table model changes, or the user sorts or changes pages, this method gets called and passed the current table model.
+    //     // You can set the `loading` prop of the table to true to use the built-in one or show you're own loading bar if you want.
+    //     this.setState({ loading: true });
+    //     fetch('http://127.0.0.1:8080/api/Cats')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             this.setState({ data: data })
+    //         }
+    //         );
+    // Request the data however you want.  Here, we'll use our mocked service we created earlier
+    // requestData(
+    //     state.pageSize,
+    //     state.page,
+    //     state.sorted,
+    //     state.filtered
+    // ).then(res => {
+    //     // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
+    //     this.setState({
+    //         data: res.rows,
+    //         pages: res.pages,
+    //         loading: false
+    //     });
+    // });
+    //}
     render() {
         return (
             <div>
@@ -105,7 +111,28 @@ class Cats extends Component {
                     columns={this.state.columns}
                     defaultPageSize={5}
                     className="-striped -highlight"
-                    //onFetchData={this.fetchData}
+                    onFetchData={(state, instance) => {
+                        // show the loading overlay
+                        this.setState({ loading: true })
+                        // fetch your data
+                        fetch('http://127.0.0.1:8080/api/Cats')
+                            .then(response => response.json())
+                            .then(data => {
+                                this.setState({ data: data })
+                            }
+                            )
+                        {/* .then((res) => {
+                                // Update react-table
+                                this.setState({
+                                    data: res.data.rows,
+                                    pages: res.data.pages,
+                                    loading: false
+                                })
+                            }
+                            ) */}
+                    }
+                    }
+
                 />
 
                 <p>Cat Name:
