@@ -29,3 +29,5 @@ then, update the web driver
 Now you can run
 
 `npm run protractor`
+
+![protractor screenshot](protractorScreenshot.png)
