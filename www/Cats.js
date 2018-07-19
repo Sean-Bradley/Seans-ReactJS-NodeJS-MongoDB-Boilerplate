@@ -30,19 +30,24 @@ class Cats extends Component {
                 //Header: props => <span>Friend Age</span>, // Custom header components!
                 Header: 'lastFedDate',
                 accessor: 'lastFedDate',
+            }, {
+                //Header: '',
+                //id: 'edit-button',
+                //render: ({ row }) => (<button onClick={(e) => this.handleEditClick(e, row)}>Edit</button>)
+                id: 'edit',
+                accessor: '_id',
+                Cell: ({ value }) => (<button className="btn btn-success" onClick={(e) => this.handleEditClick(e, value)}>Edit</button>)
+            }, {
+                id: 'delete',
+                accessor: '_id',
+                Cell: ({ value }) => (<button className="btn btn-danger" onClick={(e) => this.handleDeleteClick(e, value)}>Delete</button>)
             }]
         }
-        this.handleClick = this.handleClick.bind(this);
+        this.handleAddClick = this.handleAddClick.bind(this);
+        this.handleEditClick = this.handleEditClick.bind(this);
+        this.handleDeleteClick = this.handleDeleteClick.bind(this);
     }
-    componentDidMount() {
-        // fetch('http://127.0.0.1:8080/api/Cats')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         this.setState({ data: data })
-        //     }
-        //     );
-    }
-    handleClick() {
+    handleAddClick() {
         fetch('http://127.0.0.1:8080/api/Cats', {
             method: 'post',
             headers: {
@@ -56,51 +61,40 @@ class Cats extends Component {
                     .then(response => response.json())
                     .then(data => {
                         this.state.data = data;
-                        this.setState({ 
+                        this.setState({
                             table: {
                                 columns: this.state.columns,
-                                data: this.state.data 
+                                data: this.state.data
                             }
+                        })
                     })
-                })
-            )            
+            )
     };
-    // requestData(pageSize, page, sorted, filtered) {
-    //     return new Promise((resolve, reject) => {
-    //         fetch('http://127.0.0.1:8080/api/Cats')
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 this.setState({ data: data })
-    //             }
-    //             );
-    //     });
-    // };
-
-    // fetchData(state, instance) {
-    //     // Whenever the table model changes, or the user sorts or changes pages, this method gets called and passed the current table model.
-    //     // You can set the `loading` prop of the table to true to use the built-in one or show you're own loading bar if you want.
-    //     this.setState({ loading: true });
-    //     fetch('http://127.0.0.1:8080/api/Cats')
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             this.setState({ data: data })
-    //         }
-    //         );
-    // Request the data however you want.  Here, we'll use our mocked service we created earlier
-    // requestData(
-    //     state.pageSize,
-    //     state.page,
-    //     state.sorted,
-    //     state.filtered
-    // ).then(res => {
-    //     // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
-    //     this.setState({
-    //         data: res.rows,
-    //         pages: res.pages,
-    //         loading: false
-    //     });
-    // });
-    //}
+    handleEditClick(e, v) {
+        alert(v);
+    }
+    handleDeleteClick(e, v) {
+        fetch('http://127.0.0.1:8080/api/Cats/' + v, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Cache-Control': 'no-cache'
+            }
+        })
+            .then(
+                fetch('http://127.0.0.1:8080/api/Cats')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.state.data = data;
+                        this.setState({
+                            table: {
+                                columns: this.state.columns,
+                                data: this.state.data
+                            }
+                        })
+                    })
+            )
+    }
     render() {
         return (
             <div>
@@ -121,23 +115,13 @@ class Cats extends Component {
                                 this.setState({ data: data })
                             }
                             )
-                        {/* .then((res) => {
-                                // Update react-table
-                                this.setState({
-                                    data: res.data.rows,
-                                    pages: res.data.pages,
-                                    loading: false
-                                })
-                            }
-                            ) */}
                     }
                     }
-
                 />
 
                 <p>Cat Name:
                     <input type="text" value={this.state.catName} placeholder="Cat Name" onChange={(ev) => this.setState({ catName: ev.target.value })} />
-                    <button onClick={this.handleClick}>Add Cat</button>
+                    <button onClick={this.handleAddClick}>Add Cat</button>
                     <span style={{ color: 'red' }}>Cat Name is required.</span>
                 </p>
 
@@ -146,7 +130,6 @@ class Cats extends Component {
                     <pre>{this.state.debugInfo}</pre>
                 </div>
             </div>
-
         );
     }
 }
