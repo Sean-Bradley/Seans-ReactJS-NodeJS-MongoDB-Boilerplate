@@ -6,7 +6,7 @@ import 'react-table/react-table.css'
 class Cats extends Component {
     constructor(props) {
         super(props);
-        
+
 
         this.state = {
             data: [],
@@ -85,31 +85,27 @@ class Cats extends Component {
         )
     }
     handleAddClick() {
-        if (this.state.catName.length >= 4 && this.state.catName.length <= 20) {
-            fetch('http://127.0.0.1:8080/api/Cats', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Cache-Control': 'no-cache'
-                },
-                body: "name=" + this.state.catName
-            })
-                .then(
-                    fetch('http://127.0.0.1:8080/api/Cats')
-                        .then(response => response.json())
-                        .then(data => {
-                            this.state.data = data;
-                            this.setState({
-                                table: {
-                                    columns: this.state.columns,
-                                    data: this.state.data
-                                }
-                            })
+        fetch('http://127.0.0.1:8080/api/Cats', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Cache-Control': 'no-cache'
+            },
+            body: "name=" + this.state.catName
+        })
+            .then(
+                fetch('http://127.0.0.1:8080/api/Cats')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.state.data = data;
+                        this.setState({
+                            table: {
+                                columns: this.state.columns,
+                                data: this.state.data
+                            }
                         })
-                )
-        } else {
-            document.getElementById("validationMessage").style.display = "block";
-        }
+                    })
+            )
     };
     handleEditClick(e, id) {
         document.getElementById("name_" + id).style.display = "none";
@@ -139,18 +135,18 @@ class Cats extends Component {
                     })
             )
     }
-    
+
     handleAddChange(e) {
         this.setState({ catName: e.target.value });
-        var enabled = this.state.catName.length >= 4 && this.state.catName.length <= 20;
+        var enabled = this.state.catName.length >= 2 && this.state.catName.length <= 20;
         this.state.addButtonEnabled = enabled;
-        if(enabled){
+        if (enabled) {
             document.getElementById("validationMessage").style.display = "none";
-        }else{
+        } else {
             document.getElementById("validationMessage").style.display = "block";
-        } 
+        }
     }
-    render() {        
+    render() {
 
         return (
             <div>
