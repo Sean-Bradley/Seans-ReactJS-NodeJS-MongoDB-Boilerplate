@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
+import WriteAssetsWebpackPlugin from 'write-assets-webpack-plugin';
 
 export default {
     devtool: 'inline-source-map',
@@ -27,8 +28,12 @@ export default {
             {
                 test: /\.(css|less)$/,
                 use: ["style-loader", "css-loader"]
-                }
+            }
         ]
-    }
+    },
+
+    plugins: [
+        new WriteAssetsWebpackPlugin({ force: true, extension: ['js'] })
+    ]
 
 }

@@ -8,7 +8,7 @@ services:
       - "8443:8443"
     command: nginx -g "daemon off";
     volumes:
-      - ./www:/www:ro
+      - ./nodejs/www:/www:ro
     depends_on:      
       - mongodb
       - nodejs
