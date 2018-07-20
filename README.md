@@ -1,5 +1,6 @@
 # Seans ReactJS NodeJS MongoDB Boilerplate
-*Dockerised and with Tests *
+
+*Comes Dockerised and with Tests*
 
 ## To start
 
