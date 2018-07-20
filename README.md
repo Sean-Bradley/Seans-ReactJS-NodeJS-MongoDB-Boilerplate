@@ -6,9 +6,18 @@
 
 then visit
 
-`http://192.168.99.100`
+`https://localhost:8443`
 
-*dockerised on windows 10 using docker toolbox*
+## Note about docker toolbox on windows 10
+If you use docker toolbox on windows 10 home, the site will be published at ip 192.168.99.100.
+* You should open the VBox manager, 
+* Click the default machine used by docker
+* Right click and choose Settings 
+* Network > Adapter 1 > Advanced > Port Forwarding
+* Click "+" to add a new Rule
+* Set Host IP to 127.0.0.1, Host Port 8443 
+* Guest IP to 192.168.99.100 and Guest Port 8443
+
 
 ![Screenshot](screenshot.png)
 
