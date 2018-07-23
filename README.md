@@ -23,6 +23,14 @@ If you use docker toolbox on windows 10 home, the site will be published at ip 1
 
 ![Screenshot](screenshot.png)
 
+## To Test
+
+Contains mocha, chai and enzyme tests
+
+`cd nodejs`
+
+`npm test`
+
 ## Protractor e2e tests
 
 There is also the option to do e2e testing with protractor and jasmine.
