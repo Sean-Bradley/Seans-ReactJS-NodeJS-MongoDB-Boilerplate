@@ -42,7 +42,7 @@ class Cats extends Component {
                 accessor: '_id',
                 Cell: row => (
                     <div>
-                        <button id={"editButton_" + row.original._id} className="btn btn-success" onClick={(e) => this.handleEditClick(e, row.value)}>Edit</button>
+                        <button id={"editButton_" + row.original._id} className="btn btn-success" onClick={(e) => this.handleEditClick(e, row.original._id)}>Edit</button>
                         <button id={"saveButton_" + row.original._id} style={{ display: 'none' }} className="btn btn-warning">Save</button>
                     </div>
                 )
@@ -56,56 +56,55 @@ class Cats extends Component {
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.handleAddChange = this.handleAddChange.bind(this);
+        this.refreshTableData = this.refreshTableData.bind(this);
+    }
+    refreshTableData() {
+        fetch('/api/cats', {
+            method: 'get',
+            headers: {
+                'Accept': 'application/x-www-form-urlencoded',
+                'Cache-Control': 'no-cache'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                this.setState({
+                    data: data,
+                    table: {
+                        columns: this.state.columns,
+                        data: data
+                    }
+                })
+            })
     }
     saveEdits(v, id) {
         console.log(v + " " + id);
-        fetch('/api/Cats/' + id, {
+        fetch('/api/cats/' + id, {
             method: 'put',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Cache-Control': 'no-cache'
             },
             body: "name=" + v
-        }).then(
-            fetch('/api/Cats')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("name_" + id).style.display = "block";
-                    document.getElementById("input_" + id).style.display = "none";
-                    document.getElementById("editButton_" + id).style.display = "block";
-                    document.getElementById("saveButton_" + id).style.display = "none";
-                    this.state.data = data;
-                    this.setState({
-                        table: {
-                            columns: this.state.columns,
-                            data: this.state.data
-                        }
-                    })
-                })
-        )
+        }).then(() => {
+            this.refreshTableData();
+            document.getElementById("name_" + id).style.display = "block";
+            document.getElementById("input_" + id).style.display = "none";
+            document.getElementById("editButton_" + id).style.display = "block";
+            document.getElementById("saveButton_" + id).style.display = "none";
+        })
     }
     handleAddClick() {
-        fetch('/api/Cats', {
+        fetch('/api/cats', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Cache-Control': 'no-cache'
             },
             body: "name=" + this.state.catName
+        }).then(() => {
+            this.refreshTableData();
+            this.setState({ catName: '' });
         })
-            .then(
-                fetch('/api/Cats')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.state.data = data;
-                        this.setState({
-                            table: {
-                                columns: this.state.columns,
-                                data: this.state.data
-                            }
-                        })
-                    })
-            )
     };
     handleEditClick(e, id) {
         document.getElementById("name_" + id).style.display = "none";
@@ -114,39 +113,33 @@ class Cats extends Component {
         document.getElementById("saveButton_" + id).style.display = "block";
     }
     handleDeleteClick(e, id) {
-        fetch('/api/Cats/' + id, {
+        fetch('/api/cats/' + id, {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Cache-Control': 'no-cache'
             }
+        }).then(() => {
+            this.refreshTableData()
         })
-            .then(
-                fetch('/api/Cats')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.state.data = data;
-                        this.setState({
-                            table: {
-                                columns: this.state.columns,
-                                data: this.state.data
-                            }
-                        })
-                    })
-            )
     }
-
     handleAddChange(e) {
-        this.setState({ catName: e.target.value });
-        var enabled = this.state.catName.length >= 2 && this.state.catName.length <= 20;
-        this.state.addButtonEnabled = enabled;
-        if (enabled) {
-            document.getElementById("validationMessage").style.display = "none";
-        } else {
-            document.getElementById("validationMessage").style.display = "block";
-        }
+        const newCatName = e.target.value;
+        let enabled = newCatName.length >= 2 && newCatName.length <= 20;
+        this.setState({ catName: newCatName, addButtonEnabled: enabled });
     }
     render() {
+        let addCatOptions;
+        if (this.state.addButtonEnabled) {
+            addCatOptions = <button onClick={this.handleAddClick}>Add Cat</button>
+        } else {
+            addCatOptions = (
+                <span>
+                    <button disabled>Add Cat</button>
+                    <span id='validationMessage' style={{ color: 'red' }}>Cat Name is not valid.</span>
+                </span>
+            )
+        }
 
         return (
             <div>
@@ -159,7 +152,7 @@ class Cats extends Component {
                     className="-striped -highlight"
                     onFetchData={(state, instance) => {
                         this.setState({ loading: true })
-                        fetch('/api/Cats')
+                        fetch('/api/cats')
                             .then(response => response.json())
                             .then(data => {
                                 this.setState({ data: data })
@@ -169,16 +162,13 @@ class Cats extends Component {
                     }
                 />
 
-                <p>Cat Name:
-                    <input
-                        type="text"
-                        value={this.state.catName}
-                        placeholder="Cat Name"
-                        onChange={this.handleAddChange}
-                    />
-                    <button disabled={!this.state.addButtonEnabled} onClick={this.handleAddClick}>Add Cat</button>
-                    <span id='validationMessage' style={{ display: 'none', color: 'red' }}>Cat Name is not valid.</span>
-                </p>
+                <div>
+                    <label>
+                        Cat Name:
+                        <input type="text" value={this.state.catName} onChange={this.handleAddChange} placeholder="Cat Name" />
+                    </label>
+                    {addCatOptions}
+                </div>
 
                 <hr />
                 <div>Debug
