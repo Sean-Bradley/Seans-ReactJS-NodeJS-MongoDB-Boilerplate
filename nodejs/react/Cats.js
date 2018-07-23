@@ -10,7 +10,7 @@ class Cats extends Component {
 
         this.state = {
             data: [],
-            names: {},
+            editingId: {},
             debugInfo: "debiginfo",
             catName: "",
             addButtonEnabled: false,
@@ -23,12 +23,12 @@ class Cats extends Component {
             }, {
                 id: "editCell",
                 Header: 'Name',
-                accessor: d => this.state.names[d._id] = d.name,
+                accessor: '_id',
                 Cell: row => (
-                    <div>
+                    !!this.state.editingId[row.original._id] ?
+                        <input id={"input_" + row.original._id} type="text" defaultValue={row.original.name} placeholder="Cat Name" />
+                        :
                         <span id={"name_" + row.original._id}>{row.original.name}</span>
-                        <input id={"input_" + row.original._id} style={{ display: 'none' }} type="text" defaultValue={row.original.name} placeholder="Cat Name" onBlur={(e) => this.saveEdits(e.target.value, row.original._id)} />
-                    </div>
                 )
             }, {
                 Header: 'isHungry',
@@ -41,10 +41,13 @@ class Cats extends Component {
                 id: 'edit',
                 accessor: '_id',
                 Cell: row => (
-                    <div>
-                        <button id={"editButton_" + row.original._id} className="btn btn-success" onClick={(e) => this.handleEditClick(e, row.original._id)}>Edit</button>
-                        <button id={"saveButton_" + row.original._id} style={{ display: 'none' }} className="btn btn-warning">Save</button>
-                    </div>
+                    !!this.state.editingId[row.original._id] ?
+                        <div>
+                            <button id={"saveButton_" + row.original._id} className="btn btn-warning" onClick={(e) => this.handleSaveEdit(row.original._id)}>Save</button>&nbsp;
+                            <button id={"cancelButton_" + row.original._id} className="btn btn-secondary" onClick={(e) => this.handleCancelEdit(row.original._id)}>Cancel</button>
+                        </div>
+                        :
+                        <button id={"editButton_" + row.original._id} className="btn btn-success" onClick={(e) => this.handleEditClick(e, row.value)}>Edit</button>
                 )
             }, {
                 id: 'delete',
@@ -56,6 +59,8 @@ class Cats extends Component {
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.handleAddChange = this.handleAddChange.bind(this);
+        this.handleCancelEdit = this.handleCancelEdit.bind(this);
+        this.handleSaveEdit = this.handleSaveEdit.bind(this);
         this.refreshTableData = this.refreshTableData.bind(this);
     }
     refreshTableData() {
@@ -76,22 +81,31 @@ class Cats extends Component {
                 })
             })
     }
-    saveEdits(v, id) {
-        console.log(v + " " + id);
+    handleSaveEdit(id) {
+        const name = document.getElementById("input_" + id).value;
         fetch('/api/cats/' + id, {
             method: 'put',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Cache-Control': 'no-cache'
             },
-            body: "name=" + v
+            body: "name=" + name
         }).then(() => {
             this.refreshTableData();
-            document.getElementById("name_" + id).style.display = "block";
-            document.getElementById("input_" + id).style.display = "none";
-            document.getElementById("editButton_" + id).style.display = "block";
-            document.getElementById("saveButton_" + id).style.display = "none";
+
+            const editingId = this.state.editingId;
+            editingId[id] = false;
+            this.setState({
+                editingId,
+            });
         })
+    }
+    handleCancelEdit(id) {
+        const editingId = this.state.editingId;
+        editingId[id] = false;
+        this.setState({
+            editingId,
+        });
     }
     handleAddClick() {
         fetch('/api/cats', {
@@ -107,10 +121,11 @@ class Cats extends Component {
         })
     };
     handleEditClick(e, id) {
-        document.getElementById("name_" + id).style.display = "none";
-        document.getElementById("input_" + id).style.display = "block";
-        document.getElementById("editButton_" + id).style.display = "none";
-        document.getElementById("saveButton_" + id).style.display = "block";
+        const editingId = this.state.editingId;
+        editingId[id] = true;
+        this.setState({
+            editingId,
+        });
     }
     handleDeleteClick(e, id) {
         fetch('/api/cats/' + id, {
