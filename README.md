@@ -11,15 +11,17 @@ then visit
 `https://localhost:8443`
 
 ## Note about docker toolbox on windows 10
+
 1st, Download this repository to your c:/users/[useraccount] folder to minimise issues caused by docker shared folder access.
-Then after running `docker-compose up`, the site will be available at https://192.168.99.100:8443
-You can change this to https:/localhost:8443 by following these steps below.
-* Open VBox manager, 
+Then after running `docker-compose up`, the site will be available at `https://192.168.99.100:8443`
+You can change this to `https:/localhost:8443` by following these steps below.
+
+* Open VBox manager,
 * Click the default machine used by docker
-* Right click and choose Settings 
+* Right click and choose Settings
 * Network > Adapter 1 > Advanced > Port Forwarding
 * Click "+" to add a new Rule
-* Set Host IP to 127.0.0.1, Host Port 8443 
+* Set Host IP to 127.0.0.1, Host Port 8443
 * Guest IP to 192.168.99.100 and Guest Port 8443
 * https:/localhost:8443
 
