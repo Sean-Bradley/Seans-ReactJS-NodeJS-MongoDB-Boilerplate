@@ -8,7 +8,7 @@ const csurf = require('csurf');
 const cookieParser = require('cookie-parser');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://mongodb:27017/seanwasere', { useNewUrlParser: true });
+mongoose.connect('mongodb://my_user:password123@mongodb:27017/seanwasere', { useNewUrlParser: true });
 
 const compiler = webpack(config);
 
