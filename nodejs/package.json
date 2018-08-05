@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node start.js",
-    "test": "mocha --require ignore-styles tests.js ./react/*.spec.jsx",
+    "test": "mocha --require mock-local-storage --require ignore-styles tests.js ./react/*.spec.jsx",
     "update-webdriver": "webdriver-manager update",
     "protractor": "protractor e2e-tests/protractor.conf.js"
   },
@@ -40,6 +40,8 @@
     "ignore-styles": "^5.0.1",
     "jasmine-spec-reporter": "^4.2.1",
     "jsdom": "^11.11.0",
+    "mocha": "^5.2.0",
+    "mock-local-storage": "^1.0.5",
     "mongoose": "^5.2.4",
     "style-loader": "^0.21.0",
     "webpack": "^4.15.1",
