@@ -3,23 +3,15 @@ services:
   web:
     build: .
     ports:
-      #- "80:80"
-      #- "443:443"
       - "8443:8443"
     command: nginx -g "daemon off";
-    volumes:
-      - ./nodejs/www:/www:ro
     depends_on:      
       - mongodb
       - nodejs
-      #- python
-      #- java
 
   mongodb:
     container_name: mongodb
     image: 'bitnami/mongodb:latest'
-    # volumes:
-    #   - ./data:/data/db
     ports:
       - "27017:27017"
     environment:
@@ -33,7 +25,5 @@ services:
       dockerfile: nodejs/Dockerfile
     expose:
       - "8080"
-    volumes:
-      - ./nodejs:/nodejs
-    command: babel-node start.js
+    command: npm start
 

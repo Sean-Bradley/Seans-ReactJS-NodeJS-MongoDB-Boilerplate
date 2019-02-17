@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 //import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
-import Home from './home';
+import Home from './Home';
 import { Link } from 'react-router-dom';
 
 describe('Home', () => {

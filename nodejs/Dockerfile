@@ -1,12 +1,14 @@
-FROM node:8.1.2-alpine
+FROM node:alpine
 
 LABEL Sean Bradley <seanwasere@gmail.com>
 
-RUN mkdir -p /nodejs
-COPY . /nodejs
+COPY /nodejs /nodejs
 WORKDIR /nodejs
 
-RUN npm install -g babel-cli
-RUN npm install
+#RUN npm install -g babel-cli
+#RUN npm install
+
+
+RUN ls
 
 EXPOSE 8080:8080

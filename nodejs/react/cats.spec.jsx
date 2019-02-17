@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 //import { sinon } from 'sinon';
 import { shallow, mount } from 'enzyme';
-import Cats from './cats';
+import Cats from './Cats';
 //import ReactTable from "react-table";
 
 describe('Cats', () => {

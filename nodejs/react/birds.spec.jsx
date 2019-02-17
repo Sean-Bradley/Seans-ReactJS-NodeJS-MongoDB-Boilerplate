@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 //import { spy } from 'sinon';
 import { shallow, mount } from 'enzyme';
-import Birds from './birds';
+import Birds from './Birds';
 import { Link } from 'react-router-dom';
 
 
