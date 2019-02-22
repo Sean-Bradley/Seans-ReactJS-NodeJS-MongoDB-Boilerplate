@@ -2,6 +2,9 @@
 
 *Comes Dockerised and with Tests*
 
+### NOTE: This project has many concepts. If you want a project that focuses mainly on just TypeScript with NodeJS and demonstrates a basic CRUD style REST API, then see https://github.com/Sean-Bradley/Seans-TypeScript-NodeJS-CRUD-REST-API-Boilerplate
+
+
 ## To start
 
 `docker-compose up`
