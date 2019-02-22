@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "8443:8443"
+      - "3000:3000"
     command: nginx -g "daemon off";
     depends_on:      
       - mongodb
