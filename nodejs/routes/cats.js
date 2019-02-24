@@ -5,8 +5,6 @@ import Cat from '../models/cat.js';
 
 router.route('/cats')
     .post(function (req, res) {
-        //console.log("in cats post");        
-        //console.dir(req.body);
         let cat = new Cat();
         cat.name = req.body.name;
         cat.lastFedDate = Date.now();
@@ -18,7 +16,6 @@ router.route('/cats')
         });
     })
     .get(function (req, res) {
-        //console.log("in get cats");
         Cat.find(function (err, cats) {
             if (err)
                 res.send(err);
@@ -45,9 +42,4 @@ router.route('/cats/:_id')
         });
     });
 
-// router.route('/').get(function (req, res) {
-//      console.dir(req);
-// });
-
-//export default router;
 module.exports = router;
